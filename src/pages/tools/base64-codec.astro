@@ -1,0 +1,21 @@
+---
+// src/pages/tools/base64-codec.astro
+import ToolLayout from '../../layouts/ToolLayout.astro'
+import Base64Codec from '../../tools/base64-codec/Base64Codec'
+import { getTranslation } from '../../i18n'
+
+const t = getTranslation('zh')
+const toolT = t.tools['base64-codec']
+---
+
+<ToolLayout
+  title={toolT.pageTitle}
+  pageTitle={toolT.title}
+  description={toolT.description}
+  pageDescription="文本与 Base64 互转，浏览器本地处理"
+  lang="zh"
+  category="developer"
+>
+  <Base64Codec client:load lang="zh" />
+  <Fragment slot="seo-content" set:html={toolT.seoContent} />
+</ToolLayout>

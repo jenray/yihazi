@@ -1,0 +1,21 @@
+---
+// src/pages/tools/qr-code-generator.astro
+import ToolLayout from '../../layouts/ToolLayout.astro'
+import QrCodeGenerator from '../../tools/qr-code-generator/QrCodeGenerator'
+import { getTranslation } from '../../i18n'
+
+const t = getTranslation('zh')
+const toolT = t.tools['qr-code-generator']
+---
+
+<ToolLayout
+  title={toolT.pageTitle}
+  pageTitle={toolT.title}
+  description={toolT.description}
+  pageDescription="输入文字或网址，即时生成二维码"
+  lang="zh"
+  category="generator"
+>
+  <QrCodeGenerator client:load lang="zh" />
+  <Fragment slot="seo-content" set:html={toolT.seoContent} />
+</ToolLayout>

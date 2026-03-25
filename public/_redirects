@@ -1,0 +1,2 @@
+/tool/*    /tools/:splat    301
+/en/tool/* /en/tools/:splat 301

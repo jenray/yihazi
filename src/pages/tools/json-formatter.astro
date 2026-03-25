@@ -1,0 +1,21 @@
+---
+// src/pages/tools/json-formatter.astro
+import ToolLayout from '../../layouts/ToolLayout.astro'
+import JsonFormatter from '../../tools/json-formatter/JsonFormatter'
+import { getTranslation } from '../../i18n'
+
+const t = getTranslation('zh')
+const toolT = t.tools['json-formatter']
+---
+
+<ToolLayout
+  title={toolT.pageTitle}
+  pageTitle={toolT.title}
+  description={toolT.description}
+  pageDescription="粘贴 JSON，即刻格式化/压缩/校验"
+  lang="zh"
+  category="developer"
+>
+  <JsonFormatter client:load lang="zh" />
+  <Fragment slot="seo-content" set:html={toolT.seoContent} />
+</ToolLayout>

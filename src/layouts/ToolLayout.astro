@@ -1,0 +1,52 @@
+---
+// src/layouts/ToolLayout.astro
+import BaseLayout from './BaseLayout.astro'
+import Breadcrumb from '../components/Breadcrumb.astro'
+
+interface Props {
+  title: string
+  pageTitle: string
+  description: string
+  pageDescription: string
+  lang?: 'zh' | 'en'
+  category?: string
+}
+
+const {
+  title,
+  pageTitle,
+  description,
+  pageDescription,
+  lang = 'zh',
+  category,
+} = Astro.props
+
+const breadcrumbItems = lang === 'zh'
+  ? [
+      { label: '首页', href: '/' },
+      { label: '全部工具', href: '/tools' },
+      { label: pageTitle },
+    ]
+  : [
+      { label: 'Home', href: '/en' },
+      { label: 'All Tools', href: '/en/tools' },
+      { label: pageTitle },
+    ]
+---
+
+<BaseLayout title={title} description={description} lang={lang}>
+  <div class="tool-container">
+    <Breadcrumb items={breadcrumbItems} />
+    <h1 class="tool-title">{pageTitle}</h1>
+    <p class="tool-description">{pageDescription}</p>
+
+    <div class="tool-panel">
+      <slot />
+    </div>
+
+    <!-- SEO 内容区 -->
+    <div class="tool-seo-section">
+      <slot name="seo-content" />
+    </div>
+  </div>
+</BaseLayout>

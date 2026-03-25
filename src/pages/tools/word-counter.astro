@@ -1,0 +1,21 @@
+---
+// src/pages/tools/word-counter.astro
+import ToolLayout from '../../layouts/ToolLayout.astro'
+import WordCounter from '../../tools/word-counter/WordCounter'
+import { getTranslation } from '../../i18n'
+
+const t = getTranslation('zh')
+const toolT = t.tools['word-counter']
+---
+
+<ToolLayout
+  title={toolT.pageTitle}
+  pageTitle={toolT.title}
+  description={toolT.description}
+  pageDescription="粘贴或输入文本，即时统计字数、单词数、阅读时间"
+  lang="zh"
+  category="text"
+>
+  <WordCounter client:load lang="zh" />
+  <Fragment slot="seo-content" set:html={toolT.seoContent} />
+</ToolLayout>

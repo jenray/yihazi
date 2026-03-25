@@ -1,0 +1,116 @@
+---
+// src/pages/index.astro
+import BaseLayout from '../layouts/BaseLayout.astro'
+import ToolCard from '../components/ToolCard.astro'
+import { getTranslation } from '../i18n'
+import { tools, getPopularTools } from '../data/tools'
+
+const t = getTranslation('zh')
+const popular = getPopularTools()
+const categories = ['developer', 'text', 'generator', 'converter', 'image', 'calculator'] as const
+---
+
+<BaseLayout
+  title="一哈子在线工具箱 - 免费效率工具合集 | yihazi.com"
+  description="一哈子工具箱提供免费在线工具：JSON格式化、Base64编码、二维码生成、密码生成、字数统计等。浏览器本地处理，保护隐私。"
+  lang="zh"
+>
+  <!-- Hero -->
+  <section class="text-center py-16 px-4">
+    <h1 class="text-4xl font-bold mb-3">
+      <span class="text-3xl mr-2">⚡</span>{t.site.name}
+    </h1>
+    <p class="text-gray-500 text-lg mb-8">{t.site.slogan}&ensp;免费在线效率工具集</p>
+
+    <!-- 搜索框 -->
+    <div class="max-w-md mx-auto relative">
+      <input
+        type="text"
+        id="tool-search"
+        placeholder={t.site.searchPlaceholder}
+        class="w-full px-4 py-3 pl-10 border border-gray-200 rounded-xl text-sm
+               focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+        autocomplete="off"
+      />
+      <svg class="absolute left-3 top-3.5 w-4 h-4 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+    </div>
+
+    <p class="text-xs text-gray-400 mt-3">
+      🔒 {t.messages.processingLocally}
+    </p>
+  </section>
+
+  <!-- 搜索无结果提示 -->
+  <p id="no-results" class="hidden text-center text-gray-400 py-4">{t.site.noResults}</p>
+
+  <!-- 热门工具 -->
+  <section class="max-w-5xl mx-auto px-4 mb-12" id="section-popular">
+    <h2 class="text-lg font-semibold mb-4">🔥 {t.site.popular}</h2>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+      {popular.map((tool) => (
+        <ToolCard tool={tool} lang="zh" t={t} />
+      ))}
+    </div>
+  </section>
+
+  <!-- 按分类展示 -->
+  {categories.map((cat) => {
+    const catTools = tools.filter((tool) => tool.category === cat)
+    if (catTools.length === 0) return null
+    return (
+      <section class="max-w-5xl mx-auto px-4 mb-10" data-category={cat}>
+        <h2 class="text-lg font-semibold mb-4">{t.categories[cat]}</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+          {catTools.map((tool) => (
+            <ToolCard tool={tool} lang="zh" t={t} />
+          ))}
+        </div>
+      </section>
+    )
+  })}
+</BaseLayout>
+
+<!-- 搜索功能（轻量 inline JS，无需 React） -->
+<script is:inline>
+  const searchInput = document.getElementById('tool-search')
+  const noResults = document.getElementById('no-results')
+  const popularSection = document.getElementById('section-popular')
+  const cards = document.querySelectorAll('[data-tool-tags]')
+  const categorySections = document.querySelectorAll('[data-category]')
+
+  searchInput?.addEventListener('input', (e) => {
+    const query = e.target.value.toLowerCase().trim()
+
+    if (!query) {
+      cards.forEach((card) => { card.style.display = '' })
+      categorySections.forEach((s) => { s.style.display = '' })
+      popularSection?.style.setProperty('display', '')
+      noResults?.classList.add('hidden')
+      return
+    }
+
+    popularSection?.style.setProperty('display', 'none')
+    let hasResults = false
+
+    categorySections.forEach((section) => {
+      const sectionCards = section.querySelectorAll('[data-tool-tags]')
+      let sectionHasResults = false
+
+      sectionCards.forEach((card) => {
+        const tags = card.getAttribute('data-tool-tags') || ''
+        const visible = tags.toLowerCase().includes(query)
+        card.style.display = visible ? '' : 'none'
+        if (visible) {
+          hasResults = true
+          sectionHasResults = true
+        }
+      })
+
+      section.style.display = sectionHasResults ? '' : 'none'
+    })
+
+    noResults?.classList.toggle('hidden', hasResults)
+  })
+</script>

@@ -1,0 +1,21 @@
+---
+// src/pages/tools/unit-converter.astro
+import ToolLayout from '../../layouts/ToolLayout.astro'
+import UnitConverter from '../../tools/unit-converter/UnitConverter'
+import { getTranslation } from '../../i18n'
+
+const t = getTranslation('zh')
+const toolT = t.tools['unit-converter']
+---
+
+<ToolLayout
+  title={toolT.pageTitle}
+  pageTitle={toolT.title}
+  description={toolT.description}
+  pageDescription={toolT.shortDescription}
+  lang="zh"
+  category="converter"
+>
+  <UnitConverter client:load lang="zh" />
+  <Fragment slot="seo-content" set:html={toolT.seoContent} />
+</ToolLayout>

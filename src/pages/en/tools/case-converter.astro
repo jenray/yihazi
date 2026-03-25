@@ -1,0 +1,21 @@
+---
+// src/pages/en/tools/case-converter.astro
+import ToolLayout from '../../../layouts/ToolLayout.astro'
+import CaseConverter from '../../../tools/case-converter/CaseConverter'
+import { getTranslation } from '../../../i18n'
+
+const t = getTranslation('en')
+const toolT = t.tools['case-converter']
+---
+
+<ToolLayout
+  title={toolT.pageTitle}
+  pageTitle={toolT.title}
+  description={toolT.description}
+  pageDescription="Instantly convert text to UPPER, lower, Title, camelCase, snake_case, and more"
+  lang="en"
+  category="text"
+>
+  <CaseConverter client:load lang="en" />
+  <Fragment slot="seo-content" set:html={toolT.seoContent} />
+</ToolLayout>

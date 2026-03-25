@@ -1,0 +1,21 @@
+---
+// src/pages/tools/image-compressor.astro
+import ToolLayout from '../../layouts/ToolLayout.astro'
+import ImageCompressor from '../../tools/image-compressor/ImageCompressor'
+import { getTranslation } from '../../i18n'
+
+const t = getTranslation('zh')
+const toolT = t.tools['image-compressor']
+---
+
+<ToolLayout
+  title={toolT.pageTitle}
+  pageTitle={toolT.title}
+  description={toolT.description}
+  pageDescription="拖拽或选择图片，调节质量一键压缩"
+  lang="zh"
+  category="image"
+>
+  <ImageCompressor client:load lang="zh" />
+  <Fragment slot="seo-content" set:html={toolT.seoContent} />
+</ToolLayout>

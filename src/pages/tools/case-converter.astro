@@ -1,0 +1,21 @@
+---
+// src/pages/tools/case-converter.astro
+import ToolLayout from '../../layouts/ToolLayout.astro'
+import CaseConverter from '../../tools/case-converter/CaseConverter'
+import { getTranslation } from '../../i18n'
+
+const t = getTranslation('zh')
+const toolT = t.tools['case-converter']
+---
+
+<ToolLayout
+  title={toolT.pageTitle}
+  pageTitle={toolT.title}
+  description={toolT.description}
+  pageDescription="输入文本，即时转换为大写、小写、驼峰、下划线等 8 种格式"
+  lang="zh"
+  category="text"
+>
+  <CaseConverter client:load lang="zh" />
+  <Fragment slot="seo-content" set:html={toolT.seoContent} />
+</ToolLayout>

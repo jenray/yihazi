@@ -1,0 +1,21 @@
+---
+// src/pages/en/tools/css-gradient-generator.astro
+import ToolLayout from '../../../layouts/ToolLayout.astro'
+import CssGradientGenerator from '../../../tools/css-gradient-generator/CssGradientGenerator'
+import { getTranslation } from '../../../i18n'
+
+const t = getTranslation('en')
+const toolT = t.tools['css-gradient-generator']
+---
+
+<ToolLayout
+  title={toolT.pageTitle}
+  pageTitle={toolT.title}
+  description={toolT.description}
+  pageDescription={toolT.shortDescription}
+  lang="en"
+  category="generator"
+>
+  <CssGradientGenerator client:load lang="en" />
+  <Fragment slot="seo-content" set:html={toolT.seoContent} />
+</ToolLayout>

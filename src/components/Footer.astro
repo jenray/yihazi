@@ -1,0 +1,29 @@
+---
+// src/components/Footer.astro
+interface Props {
+  lang?: 'zh' | 'en'
+}
+
+const { lang = 'zh' } = Astro.props
+const isZh = lang === 'zh'
+const year = new Date().getFullYear()
+---
+
+<footer class="border-t border-gray-100 bg-gray-50">
+  <div class="max-w-5xl mx-auto px-4 py-8">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">
+      <p>© {year} yihazi.com — {isZh ? '一哈子，搞定！' : 'Get it done in a snap!'}</p>
+      <div class="flex gap-4">
+        <a href={isZh ? '/about' : '/en/about'} class="hover:text-gray-900 transition-colors">
+          {isZh ? '关于' : 'About'}
+        </a>
+        <a href={isZh ? '/privacy' : '/en/privacy'} class="hover:text-gray-900 transition-colors">
+          {isZh ? '隐私政策' : 'Privacy'}
+        </a>
+        <a href="mailto:hi@yihazi.com" class="hover:text-gray-900 transition-colors">
+          {isZh ? '联系' : 'Contact'}
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>

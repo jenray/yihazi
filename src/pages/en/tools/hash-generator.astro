@@ -1,0 +1,21 @@
+---
+// src/pages/en/tools/hash-generator.astro
+import ToolLayout from '../../../layouts/ToolLayout.astro'
+import HashGenerator from '../../../tools/hash-generator/HashGenerator'
+import { getTranslation } from '../../../i18n'
+
+const t = getTranslation('en')
+const toolT = t.tools['hash-generator']
+---
+
+<ToolLayout
+  title={toolT.pageTitle}
+  pageTitle={toolT.title}
+  description={toolT.description}
+  pageDescription="Calculate MD5 / SHA-1 / SHA-256 / SHA-512 hashes from text"
+  lang="en"
+  category="developer"
+>
+  <HashGenerator client:load lang="en" />
+  <Fragment slot="seo-content" set:html={toolT.seoContent} />
+</ToolLayout>

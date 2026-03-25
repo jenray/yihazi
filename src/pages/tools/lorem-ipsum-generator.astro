@@ -1,0 +1,21 @@
+---
+// src/pages/tools/lorem-ipsum-generator.astro
+import ToolLayout from '../../layouts/ToolLayout.astro'
+import LoremIpsumGenerator from '../../tools/lorem-ipsum-generator/LoremIpsumGenerator'
+import { getTranslation } from '../../i18n'
+
+const t = getTranslation('zh')
+const toolT = t.tools['lorem-ipsum-generator']
+---
+
+<ToolLayout
+  title={toolT.pageTitle}
+  pageTitle={toolT.title}
+  description={toolT.description}
+  pageDescription={toolT.shortDescription}
+  lang="zh"
+  category="generator"
+>
+  <LoremIpsumGenerator client:load lang="zh" />
+  <Fragment slot="seo-content" set:html={toolT.seoContent} />
+</ToolLayout>

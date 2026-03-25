@@ -1,0 +1,21 @@
+---
+// src/pages/tools/timestamp-converter.astro
+import ToolLayout from '../../layouts/ToolLayout.astro'
+import TimestampConverter from '../../tools/timestamp-converter/TimestampConverter'
+import { getTranslation } from '../../i18n'
+
+const t = getTranslation('zh')
+const toolT = t.tools['timestamp-converter']
+---
+
+<ToolLayout
+  title={toolT.pageTitle}
+  pageTitle={toolT.title}
+  description={toolT.description}
+  pageDescription="Unix 时间戳与日期时间互转，自动识别秒/毫秒"
+  lang="zh"
+  category="converter"
+>
+  <TimestampConverter client:load lang="zh" />
+  <Fragment slot="seo-content" set:html={toolT.seoContent} />
+</ToolLayout>

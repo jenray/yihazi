@@ -1,0 +1,21 @@
+---
+// src/pages/tools/url-codec.astro
+import ToolLayout from '../../layouts/ToolLayout.astro'
+import UrlCodec from '../../tools/url-codec/UrlCodec'
+import { getTranslation } from '../../i18n'
+
+const t = getTranslation('zh')
+const toolT = t.tools['url-codec']
+---
+
+<ToolLayout
+  title={toolT.pageTitle}
+  pageTitle={toolT.title}
+  description={toolT.description}
+  pageDescription="URL 编码/解码，处理中文和特殊字符"
+  lang="zh"
+  category="developer"
+>
+  <UrlCodec client:load lang="zh" />
+  <Fragment slot="seo-content" set:html={toolT.seoContent} />
+</ToolLayout>

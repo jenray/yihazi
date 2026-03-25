@@ -1,0 +1,21 @@
+---
+// src/pages/en/tools/base64-codec.astro
+import ToolLayout from '../../../layouts/ToolLayout.astro'
+import Base64Codec from '../../../tools/base64-codec/Base64Codec'
+import { getTranslation } from '../../../i18n'
+
+const t = getTranslation('en')
+const toolT = t.tools['base64-codec']
+---
+
+<ToolLayout
+  title={toolT.pageTitle}
+  pageTitle={toolT.title}
+  description={toolT.description}
+  pageDescription="Convert text to Base64 and back, locally in your browser"
+  lang="en"
+  category="developer"
+>
+  <Base64Codec client:load lang="en" />
+  <Fragment slot="seo-content" set:html={toolT.seoContent} />
+</ToolLayout>

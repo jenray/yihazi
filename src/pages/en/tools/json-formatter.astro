@@ -1,0 +1,21 @@
+---
+// src/pages/en/tools/json-formatter.astro
+import ToolLayout from '../../../layouts/ToolLayout.astro'
+import JsonFormatter from '../../../tools/json-formatter/JsonFormatter'
+import { getTranslation } from '../../../i18n'
+
+const t = getTranslation('en')
+const toolT = t.tools['json-formatter']
+---
+
+<ToolLayout
+  title={toolT.pageTitle}
+  pageTitle={toolT.title}
+  description={toolT.description}
+  pageDescription="Paste JSON and format, minify or validate instantly"
+  lang="en"
+  category="developer"
+>
+  <JsonFormatter client:load lang="en" />
+  <Fragment slot="seo-content" set:html={toolT.seoContent} />
+</ToolLayout>

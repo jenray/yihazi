@@ -1,0 +1,21 @@
+---
+// src/pages/tools/uuid-generator.astro
+import ToolLayout from '../../layouts/ToolLayout.astro'
+import UuidGenerator from '../../tools/uuid-generator/UuidGenerator'
+import { getTranslation } from '../../i18n'
+
+const t = getTranslation('zh')
+const toolT = t.tools['uuid-generator']
+---
+
+<ToolLayout
+  title={toolT.pageTitle}
+  pageTitle={toolT.title}
+  description={toolT.description}
+  pageDescription="批量生成 UUID v4，支持多种格式"
+  lang="zh"
+  category="generator"
+>
+  <UuidGenerator client:load lang="zh" />
+  <Fragment slot="seo-content" set:html={toolT.seoContent} />
+</ToolLayout>

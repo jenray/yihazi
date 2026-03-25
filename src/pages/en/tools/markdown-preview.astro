@@ -1,0 +1,21 @@
+---
+// src/pages/en/tools/markdown-preview.astro
+import ToolLayout from '../../../layouts/ToolLayout.astro'
+import MarkdownPreview from '../../../tools/markdown-preview/MarkdownPreview'
+import { getTranslation } from '../../../i18n'
+
+const t = getTranslation('en')
+const toolT = t.tools['markdown-preview']
+---
+
+<ToolLayout
+  title={toolT.pageTitle}
+  pageTitle={toolT.title}
+  description={toolT.description}
+  pageDescription={toolT.shortDescription}
+  lang="en"
+  category="developer"
+>
+  <MarkdownPreview client:load lang="en" />
+  <Fragment slot="seo-content" set:html={toolT.seoContent} />
+</ToolLayout>

@@ -1,0 +1,21 @@
+---
+// src/pages/en/tools/color-converter.astro
+import ToolLayout from '../../../layouts/ToolLayout.astro'
+import ColorConverter from '../../../tools/color-converter/ColorConverter'
+import { getTranslation } from '../../../i18n'
+
+const t = getTranslation('en')
+const toolT = t.tools['color-converter']
+---
+
+<ToolLayout
+  title={toolT.pageTitle}
+  pageTitle={toolT.title}
+  description={toolT.description}
+  pageDescription={toolT.shortDescription}
+  lang="en"
+  category="converter"
+>
+  <ColorConverter client:load lang="en" />
+  <Fragment slot="seo-content" set:html={toolT.seoContent} />
+</ToolLayout>

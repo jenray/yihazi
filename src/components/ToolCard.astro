@@ -1,0 +1,38 @@
+---
+// src/components/ToolCard.astro
+import type { ToolMeta } from '../data/tools'
+import type { Translation, Locale } from '../i18n/types'
+
+interface Props {
+  tool: ToolMeta
+  lang: Locale
+  t: Translation
+}
+
+const { tool, lang, t } = Astro.props
+const toolT = t.tools[tool.slug]
+const href = lang === 'en' ? `/en/tools/${tool.slug}` : `/tools/${tool.slug}`
+---
+
+<a
+  href={href}
+  class="group flex items-center gap-3 p-4 bg-white border border-gray-100 rounded-xl
+         hover:border-brand-200 hover:shadow-sm transition-all"
+  data-tool-tags={[tool.slug, ...tool.tags].join(',')}
+>
+  <span class="text-2xl flex-shrink-0">{tool.icon}</span>
+  <div class="min-w-0">
+    <div class="font-medium text-sm text-gray-900 group-hover:text-brand-600 transition-colors flex items-center gap-1.5">
+      {toolT?.title || tool.slug}
+      {tool.isNew && (
+        <span class="text-[10px] px-1.5 py-0.5 bg-green-100 text-green-700 rounded-full">NEW</span>
+      )}
+      {tool.isPopular && !tool.isNew && (
+        <span class="text-[10px] px-1.5 py-0.5 bg-orange-100 text-orange-700 rounded-full">🔥</span>
+      )}
+    </div>
+    <div class="text-xs text-gray-400 truncate mt-0.5">
+      {toolT?.shortDescription || ''}
+    </div>
+  </div>
+</a>

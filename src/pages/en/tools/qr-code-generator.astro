@@ -1,0 +1,21 @@
+---
+// src/pages/en/tools/qr-code-generator.astro
+import ToolLayout from '../../../layouts/ToolLayout.astro'
+import QrCodeGenerator from '../../../tools/qr-code-generator/QrCodeGenerator'
+import { getTranslation } from '../../../i18n'
+
+const t = getTranslation('en')
+const toolT = t.tools['qr-code-generator']
+---
+
+<ToolLayout
+  title={toolT.pageTitle}
+  pageTitle={toolT.title}
+  description={toolT.description}
+  pageDescription="Enter text or URL to generate a QR code instantly"
+  lang="en"
+  category="generator"
+>
+  <QrCodeGenerator client:load lang="en" />
+  <Fragment slot="seo-content" set:html={toolT.seoContent} />
+</ToolLayout>

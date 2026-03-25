@@ -1,0 +1,88 @@
+---
+// src/layouts/BaseLayout.astro
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
+import '../styles/global.css'
+
+interface Props {
+  title: string
+  description: string
+  lang?: 'zh' | 'en'
+  canonical?: string
+  ogImage?: string
+}
+
+const {
+  title,
+  description,
+  lang = 'zh',
+  canonical,
+  ogImage = '/og-image.png',
+} = Astro.props
+
+const siteUrl = 'https://yihazi.com'
+const canonicalUrl = canonical || new URL(Astro.url.pathname, siteUrl).toString()
+
+// 修正 hreflang 路径拼接：使用正则替换开头的 /en，防止双前缀
+const zhUrl = lang === 'en'
+  ? `${siteUrl}${Astro.url.pathname.replace(/^\/en/, '') || '/'}`
+  : canonicalUrl
+const enUrl = lang === 'zh'
+  ? `${siteUrl}/en${Astro.url.pathname}`
+  : canonicalUrl
+---
+
+<!doctype html>
+<html lang={lang === 'zh' ? 'zh-CN' : 'en-US'}>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonicalUrl} />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={`${siteUrl}${ogImage}`} />
+  <meta property="og:url" content={canonicalUrl} />
+  <meta property="og:type" content="website" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={`${siteUrl}${ogImage}`} />
+
+  <!-- 多语言替代链接 -->
+  <link rel="alternate" hreflang="zh-CN" href={zhUrl} />
+  <link rel="alternate" hreflang="en-US" href={enUrl} />
+  <link rel="alternate" hreflang="x-default" href={zhUrl} />
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap"
+    rel="stylesheet"
+  />
+</head>
+<body class="min-h-screen flex flex-col">
+  <Header lang={lang} />
+  <main class="flex-1">
+    <slot />
+  </main>
+  <Footer lang={lang} />
+
+  <!-- 记录最近使用的工具（本地存储） -->
+  <script is:inline>
+    if (window.location.pathname.includes('/tools/')) {
+      const toolPath = window.location.pathname
+      const recent = JSON.parse(localStorage.getItem('recentTools') || '[]')
+      const updated = [toolPath, ...recent.filter((p) => p !== toolPath)].slice(0, 10)
+      localStorage.setItem('recentTools', JSON.stringify(updated))
+    }
+  </script>
+</body>
+</html>
