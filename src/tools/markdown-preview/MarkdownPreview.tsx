@@ -1,5 +1,5 @@
 // src/tools/markdown-preview/MarkdownPreview.tsx
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { marked } from 'marked'
 import { CopyButton } from '../../ui/CopyButton'
 
@@ -36,15 +36,30 @@ interface Props { lang?: string }
 export default function MarkdownPreview({ lang = 'zh' }: Props) {
   const [md, setMd] = useState(DEFAULT_MD)
   const [tab, setTab] = useState<'split' | 'preview' | 'source'>('split')
+  const [isMounted, setIsMounted] = useState(false)
   const isZh = lang === 'zh'
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   const html = useMemo(() => {
     try {
+      if (!isMounted) return ''
       return marked.parse(md, { breaks: true, gfm: true }) as string
     } catch (e) {
       return '<p class="text-red-500">Failed to parse markdown.</p>'
     }
-  }, [md])
+  }, [md, isMounted])
+
+  if (!isMounted) {
+    return (
+      <div className="flex items-center justify-center min-h-[500px] border border-gray-100 rounded-xl bg-gray-50 text-gray-400 animate-pulse">
+        {isZh ? '正在加载编辑器...' : 'Loading editor...'}
+      </div>
+    )
+  }
+
 
   return (
     <div className="space-y-3">
