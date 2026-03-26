@@ -1,6 +1,6 @@
 // src/tools/markdown-preview/MarkdownPreview.tsx
 import { useState, useMemo, useEffect } from 'react'
-import { marked } from 'marked'
+import { parse } from 'marked'
 import { CopyButton } from '../../ui/CopyButton'
 
 const DEFAULT_MD = `# Hello, Markdown!
@@ -44,10 +44,14 @@ export default function MarkdownPreview({ lang = 'zh' }: Props) {
   }, [])
 
   const html = useMemo(() => {
+    if (!isMounted) return ''
     try {
-      if (!isMounted) return ''
-      return marked.parse(md, { breaks: true, gfm: true }) as string
+      const parsed = parse(md, { breaks: true, gfm: true })
+      // marked 最新版可能会返回 Promise，如果检测到是 Promise 我们直接给降级提示，或者因为我们没开 Async 它仍然是字符串。
+      if (typeof parsed !== 'string') return '<p class="text-yellow-600">Pending render...</p>'
+      return parsed
     } catch (e) {
+      console.error('Markdown parse error:', e)
       return '<p class="text-red-500">Failed to parse markdown.</p>'
     }
   }, [md, isMounted])
