@@ -17,13 +17,17 @@ export default defineConfig({
         locales: {
           zh: 'zh-CN',
           en: 'en-US',
+          ja: 'ja-JP',
+          es: 'es-ES',
+          pt: 'pt-BR',
+          fr: 'fr-FR',
         },
       },
     }),
   ],
   i18n: {
     defaultLocale: 'zh',
-    locales: ['zh', 'en'],
+    locales: ['zh', 'en', 'ja', 'es', 'pt', 'fr'],
     routing: {
       prefixDefaultLocale: false, // 中文不加前缀，英文加 /en/
     },

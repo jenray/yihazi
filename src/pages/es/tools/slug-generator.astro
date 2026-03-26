@@ -1,0 +1,22 @@
+---
+// src/pages/es/tools/slug-generator.astro
+import ToolLayout from '../../../layouts/ToolLayout.astro'
+import SlugGenerator from '../../../tools/slug-generator/SlugGenerator'
+import { getTranslation } from '../../../i18n'
+
+const lang = 'es'
+const t = getTranslation(lang)
+const toolT = t.tools['slug-generator']
+---
+
+<ToolLayout
+  title={toolT.pageTitle}
+  pageTitle={toolT.title}
+  description={toolT.description}
+  pageDescription={toolT.shortDescription}
+  lang={lang as any}
+  category="generator"
+>
+  <SlugGenerator client:load lang={lang as any} />
+  <Fragment slot="seo-content" set:html={toolT.seoContent} />
+</ToolLayout>

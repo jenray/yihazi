@@ -1,0 +1,22 @@
+---
+// src/pages/es/tools/json-formatter.astro
+import ToolLayout from '../../../layouts/ToolLayout.astro'
+import JsonFormatter from '../../../tools/json-formatter/JsonFormatter'
+import { getTranslation } from '../../../i18n'
+
+const lang = 'es'
+const t = getTranslation(lang)
+const toolT = t.tools['json-formatter']
+---
+
+<ToolLayout
+  title={toolT.pageTitle}
+  pageTitle={toolT.title}
+  description={toolT.description}
+  pageDescription={toolT.shortDescription}
+  lang={lang as any}
+  category="text"
+>
+  <JsonFormatter client:load lang={lang as any} />
+  <Fragment slot="seo-content" set:html={toolT.seoContent} />
+</ToolLayout>

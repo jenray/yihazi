@@ -7,7 +7,7 @@ import '../styles/global.css'
 interface Props {
   title: string
   description: string
-  lang?: 'zh' | 'en'
+  lang?: 'zh' | 'en' | 'ja' | 'es' | 'pt' | 'fr'
   canonical?: string
   ogImage?: string
 }
@@ -23,17 +23,34 @@ const {
 const siteUrl = 'https://yihazi.com'
 const canonicalUrl = canonical || new URL(Astro.url.pathname, siteUrl).toString()
 
-// 修正 hreflang 路径拼接：使用正则替换开头的 /en，防止双前缀
-const zhUrl = lang === 'en'
-  ? `${siteUrl}${Astro.url.pathname.replace(/^\/en/, '') || '/'}`
-  : canonicalUrl
-const enUrl = lang === 'zh'
-  ? `${siteUrl}/en${Astro.url.pathname}`
-  : canonicalUrl
+const langConfig = {
+  zh: 'zh-CN',
+  en: 'en-US',
+  ja: 'ja-JP',
+  es: 'es-ES',
+  pt: 'pt-BR',
+  fr: 'fr-FR'
+}
+
+// 去除现有语言前缀获取纯洁的路径（如 /tools/hash-generator）
+let cleanPath = Astro.url.pathname
+for (const l in langConfig) {
+  if (l !== 'zh' && cleanPath.startsWith(`/${l}`)) {
+    cleanPath = cleanPath.replace(`/${l}`, '')
+  }
+}
+if (!cleanPath) cleanPath = '/'
+
+const getUrlForLang = (l: string) => {
+  if (l === 'zh') return `${siteUrl}${cleanPath}`
+  const joiner = cleanPath === '/' ? '' : cleanPath
+  return `${siteUrl}/${l}${joiner}`
+}
+
 ---
 
 <!doctype html>
-<html lang={lang === 'zh' ? 'zh-CN' : 'en-US'}>
+<html lang={langConfig[lang as keyof typeof langConfig]}>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -55,9 +72,10 @@ const enUrl = lang === 'zh'
   <meta name="twitter:image" content={`${siteUrl}${ogImage}`} />
 
   <!-- 多语言替代链接 -->
-  <link rel="alternate" hreflang="zh-CN" href={zhUrl} />
-  <link rel="alternate" hreflang="en-US" href={enUrl} />
-  <link rel="alternate" hreflang="x-default" href={zhUrl} />
+  {Object.entries(langConfig).map(([l, hreflang]) => (
+    <link rel="alternate" hreflang={hreflang} href={getUrlForLang(l)} />
+  ))}
+  <link rel="alternate" hreflang="x-default" href={getUrlForLang('zh')} />
 
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 

@@ -1,0 +1,22 @@
+---
+// src/pages/fr/tools/regex-tester.astro
+import ToolLayout from '../../../layouts/ToolLayout.astro'
+import RegexTester from '../../../tools/regex-tester/RegexTester'
+import { getTranslation } from '../../../i18n'
+
+const lang = 'fr'
+const t = getTranslation(lang)
+const toolT = t.tools['regex-tester']
+---
+
+<ToolLayout
+  title={toolT.pageTitle}
+  pageTitle={toolT.title}
+  description={toolT.description}
+  pageDescription={toolT.shortDescription}
+  lang={lang as any}
+  category="developer"
+>
+  <RegexTester client:load lang={lang as any} />
+  <Fragment slot="seo-content" set:html={toolT.seoContent} />
+</ToolLayout>

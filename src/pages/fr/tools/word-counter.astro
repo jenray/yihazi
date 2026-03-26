@@ -1,0 +1,22 @@
+---
+// src/pages/fr/tools/word-counter.astro
+import ToolLayout from '../../../layouts/ToolLayout.astro'
+import WordCounter from '../../../tools/word-counter/WordCounter'
+import { getTranslation } from '../../../i18n'
+
+const lang = 'fr'
+const t = getTranslation(lang)
+const toolT = t.tools['word-counter']
+---
+
+<ToolLayout
+  title={toolT.pageTitle}
+  pageTitle={toolT.title}
+  description={toolT.description}
+  pageDescription={toolT.shortDescription}
+  lang={lang as any}
+  category="text"
+>
+  <WordCounter client:load lang={lang as any} />
+  <Fragment slot="seo-content" set:html={toolT.seoContent} />
+</ToolLayout>

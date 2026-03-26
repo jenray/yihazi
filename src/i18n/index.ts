@@ -1,21 +1,36 @@
-// src/i18n/index.ts
 import { zh } from './zh'
 import { en } from './en'
-import type { Translation, Locale } from './types'
+import { ja } from './ja'
+import { es } from './es'
+import { pt } from './pt'
+import { fr } from './fr'
+import type { Language, Translation } from './types'
 
-const translations: Record<Locale, Translation> = { zh, en }
-
-export function getTranslation(locale: Locale): Translation {
-  return translations[locale] ?? translations.zh
+export const translations: Record<Language, Translation> = {
+  zh,
+  en,
+  ja,
+  es,
+  pt,
+  fr,
 }
 
-export function getLocaleFromUrl(url: URL): Locale {
+export function getTranslation(locale: string): Translation {
+  return translations[locale as Language] ?? translations.zh
+}
+
+
+export function getLocaleFromUrl(url: URL): Language {
   const pathname = url.pathname
   if (pathname.startsWith('/en')) return 'en'
+  if (pathname.startsWith('/ja')) return 'ja'
+  if (pathname.startsWith('/es')) return 'es'
+  if (pathname.startsWith('/pt')) return 'pt'
+  if (pathname.startsWith('/fr')) return 'fr'
   return 'zh'
 }
 
-export function getToolPath(toolSlug: string, locale: Locale): string {
-  if (locale === 'en') return `/en/tools/${toolSlug}`
-  return `/tools/${toolSlug}`
+export function getToolPath(toolSlug: string, locale: Language): string {
+  if (locale === 'zh') return `/tools/${toolSlug}`
+  return `/${locale}/tools/${toolSlug}`
 }

@@ -1,0 +1,22 @@
+---
+// src/pages/pt/tools/url-codec.astro
+import ToolLayout from '../../../layouts/ToolLayout.astro'
+import UrlCodec from '../../../tools/url-codec/UrlCodec'
+import { getTranslation } from '../../../i18n'
+
+const lang = 'pt'
+const t = getTranslation(lang)
+const toolT = t.tools['url-codec']
+---
+
+<ToolLayout
+  title={toolT.pageTitle}
+  pageTitle={toolT.title}
+  description={toolT.description}
+  pageDescription={toolT.shortDescription}
+  lang={lang as any}
+  category="text"
+>
+  <UrlCodec client:load lang={lang as any} />
+  <Fragment slot="seo-content" set:html={toolT.seoContent} />
+</ToolLayout>

@@ -1,0 +1,104 @@
+---
+// src/pages/ja/index.astro
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import ToolCard from '../../components/ToolCard.astro'
+import { getTranslation } from '../../i18n'
+import { tools } from '../../data/tools'
+
+const lang = 'ja'
+const t = getTranslation(lang)
+
+const categorizedTools = tools.reduce((acc, tool) => {
+  if (!acc[tool.category]) acc[tool.category] = []
+  acc[tool.category].push({ ...tool, ...t.tools[tool.id as keyof typeof t.tools] })
+  return acc
+}, {} as Record<string, any[]>)
+---
+
+<BaseLayout title={t.site.name + " - " + t.site.slogan} lang="ja">
+  <div class="py-8">
+    <div class="text-center mb-12 py-10 bg-gradient-to-br from-brand-500 to-brand-700 rounded-3xl text-white shadow-xl relative overflow-hidden">
+      <div class="absolute inset-0 bg-[url('/grid.svg')] opacity-20"></div>
+      <div class="relative z-10 space-y-4">
+        <h1 class="text-5xl font-extrabold tracking-tight">{t.site.name}</h1>
+        <p class="text-xl font-medium text-brand-100">{t.site.slogan}</p>
+        <div class="max-w-md mx-auto mt-6 relative text-gray-900 group">
+          <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-brand-500 transition-colors">🔍</span>
+          <input
+            type="text"
+            id="global-search"
+            placeholder={t.site.searchPlaceholder}
+            class="w-full pl-11 pr-4 py-3 rounded-full bg-white/95 backdrop-blur shadow-lg border-2 border-transparent focus:border-brand-300 focus:outline-none focus:ring-4 focus:ring-brand-500/20 transition-all text-base"
+          />
+        </div>
+      </div>
+    </div>
+    
+    <div id="search-results" class="hidden space-y-6 mb-12">
+      <h2 class="text-xl font-semibold flex items-center gap-2">🔍 {t.site.search}</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="search-grid"></div>
+      <p id="no-results" class="hidden text-gray-500 py-8 text-center">{t.site.noResults}</p>
+    </div>
+
+    <div id="default-content" class="space-y-12">
+      {Object.entries(categorizedTools).map(([category, items]) => (
+        <section class="space-y-6">
+          <h2 class="text-xl font-semibold flex items-center gap-2 text-gray-800">
+            {t.categories[category as keyof typeof t.categories] || category}
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {items.map(tool => (
+              <ToolCard tool={tool} lang={lang as any} t={t} />
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  import { tools } from '../../data/tools'
+
+  const searchInput = document.getElementById('global-search') as HTMLInputElement
+  const defaultContent = document.getElementById('default-content')
+  const searchResults = document.getElementById('search-results')
+  const searchGrid = document.getElementById('search-grid')
+  const noResults = document.getElementById('no-results')
+
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      const query = (e.target as HTMLInputElement).value.toLowerCase().trim()
+      
+      if (!query) {
+        defaultContent?.classList.remove('hidden')
+        searchResults?.classList.add('hidden')
+        return
+      }
+
+      defaultContent?.classList.add('hidden')
+      searchResults?.classList.remove('hidden')
+
+      const matched = tools.filter(t => t.id.includes(query) || (t as any).isNew) // Fallback logic simpler for static script
+      
+      if (searchGrid) {
+        if (matched.length > 0) {
+          noResults?.classList.add('hidden')
+          searchGrid.innerHTML = matched.map(tool => `
+            <a href="/ja/tools/${tool.id}" class="group block p-5 rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-brand-200 transition-all">
+              <div class="flex items-start gap-4">
+                <span class="text-2xl">${tool.icon}</span>
+                <div class="space-y-1.5 flex-1">
+                  <h3 class="font-semibold text-gray-900 group-hover:text-brand-600 transition-colors">${tool.id}</h3>
+                </div>
+              </div>
+            </a>
+          `).join('')
+        } else {
+          searchGrid.innerHTML = ''
+          noResults?.classList.remove('hidden')
+        }
+      }
+    })
+  }
+</script>

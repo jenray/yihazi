@@ -1,17 +1,17 @@
 ---
 // src/components/ToolCard.astro
 import type { ToolMeta } from '../data/tools'
-import type { Translation, Locale } from '../i18n/types'
+import type { Translation, Language } from '../i18n/types'
 
 interface Props {
   tool: ToolMeta
-  lang: Locale
+  lang: Language
   t: Translation
 }
 
 const { tool, lang, t } = Astro.props
 const toolT = t.tools[tool.slug]
-const href = lang === 'en' ? `/en/tools/${tool.slug}` : `/tools/${tool.slug}`
+const href = lang === 'zh' ? `/tools/${tool.slug}` : `/${lang}/tools/${tool.slug}`
 ---
 
 <a

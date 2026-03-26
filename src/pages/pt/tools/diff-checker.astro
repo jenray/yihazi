@@ -1,0 +1,22 @@
+---
+// src/pages/pt/tools/diff-checker.astro
+import ToolLayout from '../../../layouts/ToolLayout.astro'
+import DiffChecker from '../../../tools/diff-checker/DiffChecker'
+import { getTranslation } from '../../../i18n'
+
+const lang = 'pt'
+const t = getTranslation(lang)
+const toolT = t.tools['diff-checker']
+---
+
+<ToolLayout
+  title={toolT.pageTitle}
+  pageTitle={toolT.title}
+  description={toolT.description}
+  pageDescription={toolT.shortDescription}
+  lang={lang as any}
+  category="text"
+>
+  <DiffChecker client:load lang={lang as any} />
+  <Fragment slot="seo-content" set:html={toolT.seoContent} />
+</ToolLayout>

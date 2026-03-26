@@ -1,0 +1,22 @@
+---
+// src/pages/ja/tools/lorem-ipsum-generator.astro
+import ToolLayout from '../../../layouts/ToolLayout.astro'
+import LoremIpsumGenerator from '../../../tools/lorem-ipsum-generator/LoremIpsumGenerator'
+import { getTranslation } from '../../../i18n'
+
+const lang = 'ja'
+const t = getTranslation(lang)
+const toolT = t.tools['lorem-ipsum-generator']
+---
+
+<ToolLayout
+  title={toolT.pageTitle}
+  pageTitle={toolT.title}
+  description={toolT.description}
+  pageDescription={toolT.shortDescription}
+  lang={lang as any}
+  category="generator"
+>
+  <LoremIpsumGenerator client:load lang={lang as any} />
+  <Fragment slot="seo-content" set:html={toolT.seoContent} />
+</ToolLayout>

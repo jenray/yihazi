@@ -1,37 +1,76 @@
 ---
 // src/components/Header.astro
 interface Props {
-  lang?: 'zh' | 'en'
+  lang?: 'zh' | 'en' | 'ja' | 'es' | 'pt' | 'fr'
 }
 
 const { lang = 'zh' } = Astro.props
 const isZh = lang === 'zh'
+
+const langConfig = [
+  { code: 'zh', name: '简体中文' },
+  { code: 'en', name: 'English' },
+  { code: 'ja', name: '日本語' },
+  { code: 'es', name: 'Español' },
+  { code: 'pt', name: 'Português' },
+  { code: 'fr', name: 'Français' },
+]
+
+let cleanPath = Astro.url.pathname
+for (const l of langConfig.map(c => c.code)) {
+  if (l !== 'zh' && cleanPath.startsWith(`/${l}`)) {
+    cleanPath = cleanPath.replace(`/${l}`, '')
+  }
+}
+if (!cleanPath) cleanPath = '/'
 ---
 
 <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-N7JBQH4L');</script>
+<!-- End Google Tag Manager -->
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T49TLM62DH"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-T49TLM62DH');
+</script>
+
   <nav class="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
-    <a href={isZh ? '/' : '/en'} class="flex items-center gap-2 text-lg font-bold text-gray-900">
+    <a href={isZh ? '/' : `/${lang}`} class="flex items-center gap-2 text-lg font-bold text-gray-900">
       <span class="text-2xl">⚡</span>
       <span>{isZh ? '一哈子' : 'Yihazi'}</span>
     </a>
 
-    <div class="flex items-center gap-6 text-sm">
+    <div class="flex items-center gap-4 text-sm">
       <a
-        href={isZh ? '/tools' : '/en/tools'}
-        class="text-gray-600 hover:text-gray-900 transition-colors"
+        href={isZh ? '/tools' : `/${lang}/tools`}
+        class="text-gray-600 hover:text-gray-900 transition-colors hidden sm:block"
       >
         {isZh ? '全部工具' : 'All Tools'}
       </a>
 
-      <!-- 语言切换 -->
-      <a
-        href={isZh ? '/en' : '/'}
-        class="px-2 py-1 text-xs border border-gray-200 rounded-md text-gray-500 hover:text-gray-900 hover:border-gray-400 transition-colors"
+      <!-- 语言选择器 -->
+      <select 
+        class="lang-selector px-2 py-1.5 text-xs sm:text-sm border border-gray-200 rounded-lg text-gray-700 bg-white hover:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all cursor-pointer shadow-sm"
+        data-clean-path={cleanPath}
       >
-        {isZh ? 'EN' : '中文'}
-      </a>
+        {langConfig.map((l) => (
+          <option value={l.code} selected={lang === l.code}>
+            {l.name}
+          </option>
+        ))}
+      </select>
 
-      <!-- GitHub 链接 -->
       <a
         href="https://github.com/jenray/yihazi"
         target="_blank"
@@ -39,10 +78,25 @@ const isZh = lang === 'zh'
         class="text-gray-400 hover:text-gray-600 transition-colors"
         aria-label="GitHub"
       >
-        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+        <svg class="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
           <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12" />
         </svg>
       </a>
     </div>
   </nav>
 </header>
+
+<script>
+  document.querySelectorAll('.lang-selector').forEach(select => {
+    select.addEventListener('change', (e) => {
+      const targetLang = (e.target as HTMLSelectElement).value;
+      const cleanPath = select.getAttribute('data-clean-path') || '/';
+      localStorage.setItem('yihazi_lang', targetLang);
+      
+      const newUrl = targetLang === 'zh' 
+        ? cleanPath 
+        : `/${targetLang}${cleanPath === '/' ? '' : cleanPath}`;
+      window.location.href = newUrl;
+    });
+  });
+</script>

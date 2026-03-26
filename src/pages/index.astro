@@ -10,6 +10,35 @@ const popular = getPopularTools()
 const categories = ['developer', 'text', 'generator', 'converter', 'image', 'calculator'] as const
 ---
 
+<!-- 语言检测：仅在首页执行 -->
+<script is:inline>
+  (function() {
+    try {
+      if (window.location.pathname !== '/') return;
+      const savedLang = localStorage.getItem('yihazi_lang')
+      if (savedLang && savedLang !== 'zh') {
+        window.location.replace('/' + savedLang + '/')
+        return
+      }
+      if (!savedLang) {
+        const navLangs = navigator.languages || [navigator.language || 'zh']
+        for (let i = 0; i < navLangs.length; i++) {
+          const code = navLangs[i].split('-')[0].toLowerCase()
+          if (['en', 'ja', 'es', 'pt', 'fr'].includes(code)) {
+            localStorage.setItem('yihazi_lang', code)
+            window.location.replace('/' + code + '/')
+            return
+          }
+          if (code === 'zh') {
+            localStorage.setItem('yihazi_lang', 'zh')
+            return
+          }
+        }
+      }
+    } catch (e) {}
+  })()
+</script>
+
 <BaseLayout
   title="一哈子在线工具箱 - 免费效率工具合集 | yihazi.com"
   description="一哈子工具箱提供免费在线工具：JSON格式化、Base64编码、二维码生成、密码生成、字数统计等。浏览器本地处理，保护隐私。"

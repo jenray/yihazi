@@ -1,5 +1,5 @@
 // src/i18n/types.ts
-export type Locale = 'zh' | 'en'
+export type Language = 'zh' | 'en' | 'ja' | 'es' | 'pt' | 'fr'
 
 export interface ToolTranslation {
   title: string

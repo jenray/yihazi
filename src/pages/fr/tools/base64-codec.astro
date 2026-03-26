@@ -1,0 +1,22 @@
+---
+// src/pages/fr/tools/base64-codec.astro
+import ToolLayout from '../../../layouts/ToolLayout.astro'
+import Base64Codec from '../../../tools/base64-codec/Base64Codec'
+import { getTranslation } from '../../../i18n'
+
+const lang = 'fr'
+const t = getTranslation(lang)
+const toolT = t.tools['base64-codec']
+---
+
+<ToolLayout
+  title={toolT.pageTitle}
+  pageTitle={toolT.title}
+  description={toolT.description}
+  pageDescription={toolT.shortDescription}
+  lang={lang as any}
+  category="text"
+>
+  <Base64Codec client:load lang={lang as any} />
+  <Fragment slot="seo-content" set:html={toolT.seoContent} />
+</ToolLayout>
