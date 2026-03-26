@@ -31,16 +31,19 @@ console.log(greet('World'))
 | age  | number | 年龄 |
 `
 
-interface Props { lang: 'zh' | 'en' }
+interface Props { lang?: string }
 
-export default function MarkdownPreview({ lang }: Props) {
+export default function MarkdownPreview({ lang = 'zh' }: Props) {
   const [md, setMd] = useState(DEFAULT_MD)
   const [tab, setTab] = useState<'split' | 'preview' | 'source'>('split')
   const isZh = lang === 'zh'
 
   const html = useMemo(() => {
-    marked.setOptions({ breaks: true, gfm: true })
-    return marked.parse(md) as string
+    try {
+      return marked.parse(md, { breaks: true, gfm: true }) as string
+    } catch (e) {
+      return '<p class="text-red-500">Failed to parse markdown.</p>'
+    }
   }, [md])
 
   return (
