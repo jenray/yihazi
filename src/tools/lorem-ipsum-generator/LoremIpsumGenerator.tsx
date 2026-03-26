@@ -2,7 +2,7 @@
 import { useState, useMemo } from 'react'
 import { CopyButton } from '../../ui/CopyButton'
 
-interface Props { lang: 'zh' | 'en' }
+interface Props { lang?: string }
 
 const WORDS = [
   'lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur', 'adipiscing', 'elit',

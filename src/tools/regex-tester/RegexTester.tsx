@@ -1,7 +1,7 @@
 // src/tools/regex-tester/RegexTester.tsx
 import { useState, useMemo } from 'react'
 
-interface Props { lang: 'zh' | 'en' }
+interface Props { lang?: string }
 
 export default function RegexTester({ lang }: Props) {
   const [pattern, setPattern] = useState('')

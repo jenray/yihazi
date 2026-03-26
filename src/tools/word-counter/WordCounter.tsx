@@ -1,9 +1,7 @@
 // src/tools/word-counter/WordCounter.tsx
 import { useState, useMemo } from 'react'
 
-interface Props {
-  lang: 'zh' | 'en'
-}
+interface Props { lang?: string }
 
 export default function WordCounter({ lang }: Props) {
   const [text, setText] = useState('')

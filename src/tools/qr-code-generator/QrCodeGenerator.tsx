@@ -2,9 +2,7 @@
 import { useState, useEffect, useRef } from 'react'
 import QRCode from 'qrcode'
 
-interface Props {
-  lang: 'zh' | 'en'
-}
+interface Props { lang?: string }
 
 export default function QrCodeGenerator({ lang }: Props) {
   const [text, setText] = useState('')

@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { diffLines } from 'diff'
 
-interface Props { lang: 'zh' | 'en' }
+interface Props { lang?: string }
 
 export default function DiffChecker({ lang }: Props) {
   const [left, setLeft] = useState('')

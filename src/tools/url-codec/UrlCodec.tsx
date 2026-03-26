@@ -2,9 +2,7 @@
 import { useState } from 'react'
 import { CopyButton } from '../../ui/CopyButton'
 
-interface Props {
-  lang: 'zh' | 'en'
-}
+interface Props { lang?: string }
 
 export default function UrlCodec({ lang }: Props) {
   const [input, setInput] = useState('')

@@ -1,7 +1,7 @@
 // src/tools/unit-converter/UnitConverter.tsx
 import { useState, useMemo } from 'react'
 
-interface Props { lang: 'zh' | 'en' }
+interface Props { lang?: string }
 
 type UnitCategory = 'length' | 'weight' | 'temperature' | 'area' | 'speed'
 

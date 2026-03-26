@@ -2,7 +2,7 @@
 import { useState, useMemo } from 'react'
 import { CopyButton } from '../../ui/CopyButton'
 
-interface Props { lang: 'zh' | 'en' }
+interface Props { lang?: string }
 
 function toSlug(text: string, separator: string): string {
   return text

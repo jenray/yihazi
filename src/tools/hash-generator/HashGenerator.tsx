@@ -3,9 +3,7 @@ import { useState } from 'react'
 import { CopyButton } from '../../ui/CopyButton'
 import CryptoJS from 'crypto-js'
 
-interface Props {
-  lang: 'zh' | 'en'
-}
+interface Props { lang?: string }
 
 const algorithms = ['MD5', 'SHA1', 'SHA256', 'SHA512'] as const
 type Algorithm = (typeof algorithms)[number]

@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { CopyButton } from '../../ui/CopyButton'
 
 interface Stop { color: string; position: number }
-interface Props { lang: 'zh' | 'en' }
+interface Props { lang?: string }
 
 export default function CssGradientGenerator({ lang }: Props) {
   const [type, setType] = useState<'linear' | 'radial'>('linear')

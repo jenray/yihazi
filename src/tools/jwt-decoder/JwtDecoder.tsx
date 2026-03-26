@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { CopyButton } from '../../ui/CopyButton'
 
-interface Props { lang: 'zh' | 'en' }
+interface Props { lang?: string }
 
 function safeBase64Decode(str: string): string {
   try {

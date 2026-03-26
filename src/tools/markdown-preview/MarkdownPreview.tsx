@@ -3,7 +3,9 @@ import { useState, useMemo, useEffect } from 'react'
 import { parse } from 'marked'
 import { CopyButton } from '../../ui/CopyButton'
 
-const DEFAULT_MD = `# Hello, Markdown!
+const getDefaultMd = (lang: string) => {
+  if (lang === 'zh') {
+    return `# Hello, Markdown!
 
 这是一个**实时预览**编辑器，输入 Markdown，右侧即时渲染。
 
@@ -30,11 +32,41 @@ console.log(greet('World'))
 | name | string | 用户名 |
 | age  | number | 年龄 |
 `
+  }
+
+  return `# Hello, Markdown!
+
+This is a **live preview** editor. Type Markdown and see it rendered instantly.
+
+## Features
+
+- Headers (H1 ~ H6)
+- **Bold** and *Italic*
+- Ordered and Unordered Lists
+- \`Inline code\` and Code blocks
+- [Links](https://yihazi.com) and Images
+- Tables
+
+## Code Syntax
+
+\`\`\`javascript
+const greet = (name) => \`Hello, \${name}!\`
+console.log(greet('World'))
+\`\`\`
+
+## Tables
+
+| Header | Type | Description |
+|------|------|------|
+| name | string | User name |
+| age  | number | User age |
+`
+}
 
 interface Props { lang?: string }
 
 export default function MarkdownPreview({ lang = 'zh' }: Props) {
-  const [md, setMd] = useState(DEFAULT_MD)
+  const [md, setMd] = useState(getDefaultMd(lang))
   const [tab, setTab] = useState<'split' | 'preview' | 'source'>('split')
   const [isMounted, setIsMounted] = useState(false)
   const isZh = lang === 'zh'

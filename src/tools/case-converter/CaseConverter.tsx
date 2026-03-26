@@ -2,9 +2,7 @@
 import { useState } from 'react'
 import { CopyButton } from '../../ui/CopyButton'
 
-interface Props {
-  lang: 'zh' | 'en'
-}
+interface Props { lang?: string }
 
 function toTitleCase(str: string): string {
   return str.toLowerCase().replace(/(?:^|\s)\w/g, (c) => c.toUpperCase())

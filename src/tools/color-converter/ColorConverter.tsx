@@ -2,7 +2,7 @@
 import { useState, useCallback } from 'react'
 import { CopyButton } from '../../ui/CopyButton'
 
-interface Props { lang: 'zh' | 'en' }
+interface Props { lang?: string }
 
 // --- 颜色转换工具函数 ---
 function hexToRgb(hex: string): [number, number, number] | null {

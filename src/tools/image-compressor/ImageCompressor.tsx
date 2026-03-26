@@ -4,9 +4,7 @@ import Compressor from 'compressorjs'
 import { FileDropzone } from '../../ui/FileDropzone'
 import { formatBytes } from '../../lib/utils'
 
-interface Props {
-  lang: 'zh' | 'en'
-}
+interface Props { lang?: string }
 
 interface CompressResult {
   originalSize: number

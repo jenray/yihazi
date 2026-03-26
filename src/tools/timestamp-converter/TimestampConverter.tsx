@@ -2,9 +2,7 @@
 import { useState, useEffect } from 'react'
 import { CopyButton } from '../../ui/CopyButton'
 
-interface Props {
-  lang: 'zh' | 'en'
-}
+interface Props { lang?: string }
 
 export default function TimestampConverter({ lang }: Props) {
   const [timestamp, setTimestamp] = useState('')
