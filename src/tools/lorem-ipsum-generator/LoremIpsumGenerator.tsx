@@ -26,8 +26,8 @@ const ZH_CHARS = [
   '业', '本', '去', '把', '性', '好', '应', '开', '它', '合', '还', '因', '由', '其'
 ]
 
-function generateText(type: 'words' | 'sentences' | 'paragraphs', count: number, lang: 'zh' | 'en'): string {
-  const dictionary = lang === 'en' ? WORDS : ZH_CHARS
+function generateText(type: 'words' | 'sentences' | 'paragraphs', count: number, lang: string): string {
+  const dictionary = lang === 'zh' ? ZH_CHARS : WORDS
   const randomWord = () => dictionary[Math.floor(Math.random() * dictionary.length)]
   
   const generateSentence = (wordCount: number) => {
@@ -40,7 +40,10 @@ function generateText(type: 'words' | 'sentences' | 'paragraphs', count: number,
   }
 
   const generateParagraph = (sentenceCount: number) => {
-    return Array.from({ length: sentenceCount }, () => generateSentence(Math.floor(Math.random() * 8) + 5)).join(lang === 'zh' ? '' : ' ')
+    if (lang === 'zh') {
+      return Array.from({ length: sentenceCount }, () => generateSentence(Math.floor(Math.random() * 8) + 5)).join('')
+    }
+    return Array.from({ length: sentenceCount }, () => generateSentence(Math.floor(Math.random() * 8) + 5)).join(' ')
   }
 
   if (type === 'words') {
@@ -51,7 +54,10 @@ function generateText(type: 'words' | 'sentences' | 'paragraphs', count: number,
   }
 
   if (type === 'sentences') {
-    return Array.from({ length: count }, () => generateSentence(Math.floor(Math.random() * 8) + 5)).join(lang === 'zh' ? '' : ' ')
+    if (lang === 'zh') {
+      return Array.from({ length: count }, () => generateSentence(Math.floor(Math.random() * 8) + 5)).join('')
+    }
+    return Array.from({ length: count }, () => generateSentence(Math.floor(Math.random() * 8) + 5)).join(' ')
   }
 
   if (type === 'paragraphs') {
@@ -61,10 +67,12 @@ function generateText(type: 'words' | 'sentences' | 'paragraphs', count: number,
   return ''
 }
 
-export default function LoremIpsumGenerator({ lang }: Props) {
+export default function LoremIpsumGenerator({ lang = 'zh' }: Props) {
   const [count, setCount] = useState(3)
   const [type, setType] = useState<'words' | 'sentences' | 'paragraphs'>('paragraphs')
-  const [textLang, setTextLang] = useState<'en' | 'zh'>(lang)
+  
+  const initialTextLang = lang === 'zh' ? 'zh' : 'en'
+  const [textLang, setTextLang] = useState<'en' | 'zh'>(initialTextLang)
   const [htmlTags, setHtmlTags] = useState(false)
   const isZh = lang === 'zh'
 
