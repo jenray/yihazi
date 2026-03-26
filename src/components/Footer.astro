@@ -1,35 +1,40 @@
 ---
 // src/components/Footer.astro
 interface Props {
-  lang?: 'zh' | 'en'
+  lang?: 'zh' | 'en' | 'ja' | 'es' | 'pt' | 'fr'
 }
 
 const { lang = 'zh' } = Astro.props
-const isZh = lang === 'zh'
 const year = new Date().getFullYear()
+
+const translations = {
+  zh: { msg: '一哈子，搞定！', about: '关于', privacy: '隐私政策', contact: '联系' },
+  en: { msg: 'Get it done in a snap!', about: 'About', privacy: 'Privacy', contact: 'Contact' },
+  ja: { msg: '一瞬で完了！', about: '概要', privacy: 'プライバシー', contact: '連絡先' },
+  es: { msg: '¡Hazlo en un instante!', about: 'Acerca de', privacy: 'Privacidad', contact: 'Contacto' },
+  pt: { msg: 'Faça em um instante!', about: 'Sobre', privacy: 'Privacidade', contact: 'Contato' },
+  fr: { msg: 'Fait en un instant !', about: 'À propos', privacy: 'Confidentialité', contact: 'Contact' },
+}
+const t = translations[lang as keyof typeof translations] || translations.zh
+
+const route = (path: string) => lang === 'zh' ? `/${path}` : `/${lang}/${path}`
 ---
 
-<footer class="border-t border-gray-100 bg-gray-50">
+<footer class="border-t border-gray-100 bg-gray-50 mt-auto">
   <div class="max-w-5xl mx-auto px-4 py-8">
     <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">
-      <p>© {year} yihazi.com — {isZh ? '一哈子，搞定！' : 'Get it done in a snap!'}</p>
-      <div class="flex gap-4">
-        <a href={isZh ? '/about' : '/en/about'} class="hover:text-gray-900 transition-colors">
-          {isZh ? '关于' : 'About'}
+      <p>© {year} yihazi.com — {t.msg}</p>
+      <div class="flex gap-4 flex-wrap justify-center">
+        <a href={route('about')} class="hover:text-gray-900 transition-colors">
+          {t.about}
         </a>
-        <a href={isZh ? '/privacy' : '/en/privacy'} class="hover:text-gray-900 transition-colors">
-          {isZh ? '隐私政策' : 'Privacy'}
+        <a href={route('privacy')} class="hover:text-gray-900 transition-colors">
+          {t.privacy}
         </a>
         <a href="mailto:hi@yihazi.com" class="hover:text-gray-900 transition-colors">
-          {isZh ? '联系' : 'Contact'}
+          {t.contact}
         </a>
       </div>
     </div>
   </div>
-
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N7JBQH4L"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
-
 </footer>
