@@ -22,9 +22,9 @@
 
 - 🔒 **本地处理，隐私优先**：所有数据转换、编码和文件处理均在您的浏览器本地执行，绝不上传任何数据到服务器。
 - ⚡️ **极致的加载性能**：受益于 Astro 的局部水合技术（Islands Architecture），页面默认以纯静态 HTML 输出，按需加载 React 交互脚本。
-- 🌍 **国际化双语支持**：无缝支持 **简体中文** 和 **English**，拥有原生的 `hreflang` 搜索引擎优化与完全本地化的多语言路由。
+- 🌍 **国际化 6 语支持**：无缝支持 **简体中文、英语 (en)、日语 (ja)、西班牙语 (es)、葡萄牙语 (pt) 和 法语 (fr)**。内置浏览器偏好探测，首次访问能依据 `navigator.languages` 实现无感智能重定向，拥有原生 `hreflang` 标签的完美全站 SEO。
 - 🧑‍💻 **开发者友好**：支持暗黑模式（即将推出）、响应式布局、完善的代码高亮与便捷的一键“复制”功能。
-- 📦 **边缘节点的静态托管**：专为 Cloudflare Pages / Vercel 等平台设计，支持零配置构建即发布。
+- 📦 **边缘节点的静态托管**：专为 Cloudflare Pages / Vercel 等平台设计，支持零配置构建即发布（超快全站 132 个 SSG 页面在 3 秒内构建完成）。
 
 ## 🛠️ 全家桶工具集
 当前版本包含分为四大类的 **20个高效工具**：
@@ -87,18 +87,22 @@ pnpm run preview
 yihazi/
 ├── public/                 # 静态资源、robots.txt、重定向配置等
 ├── src/
-│   ├── components/         # Astro 通用布局组件（页头、页脚、面包屑）
+│   ├── components/         # Astro 通用布局组件（页头多语言选框、页脚、面包屑）
 │   ├── data/               # 所有工具的配置与元数据检索数据
-│   ├── i18n/               # 中英双语对照翻译与类型文件
-│   ├── layouts/            # 页面框架（BaseLayout 注入 Meta，ToolLayout 包裹工具）
+│   ├── i18n/               # 六国语言对照翻译 (`es.ts`, `ja.ts` 等) 与 TS 类型
+│   ├── layouts/            # 页面框架（BaseLayout 注入 6 国语言 hreflang 与 Meta）
 │   ├── pages/              # Astro 基于文件系统的路由目录
-│   │   ├── tools/          # -> 中文路由
-│   │   └── en/tools/       # -> 英文路由
+│   │   ├── tools/          # -> 中文节点 (根路由)
+│   │   ├── en/tools/       # -> 英语节点
+│   │   ├── ja/tools/       # -> 日语节点
+│   │   ├── es/tools/       # -> 西班牙语节点
+│   │   ├── pt/tools/       # -> 葡萄牙语节点
+│   │   └── fr/tools/       # -> 法语节点
 │   ├── tools/              # 核心层：承载各工具的具体 React 业务组件与逻辑库
 │   └── ui/                 # 跨工具复用的底层 React 基础骨架组件（Dropzone, Button）
-├── astro.config.mjs        # Astro 及 Sitemap 插件配置文件
+├── astro.config.mjs        # Astro 及 Sitemap 多语言路由插件配置文件
 ├── tailwind.config.mjs     # 顺滑自适应样式表调色盘定义，采用 Tailwind CSS v3
-└── package.json            # 生产依赖项和开发依赖脚本描述
+└── package.json            # 生产依赖项和开发脚本描述
 ```
 
 ## 📄 依赖许可说明
