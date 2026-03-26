@@ -47,37 +47,77 @@ const getUrlForLang = (l: string) => {
   return `${siteUrl}/${l}${joiner}`
 }
 
+const currentLocale = langConfig[lang as keyof typeof langConfig]
+const alternateLocales = Object.values(langConfig).filter(l => l !== currentLocale)
+
+// Schema.org JSON-LD Configuration for Rich Snippets
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Yihazi Toolbox",
+  "alternateName": "一哈子在线工具箱",
+  "url": siteUrl,
+  "inLanguage": currentLocale,
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": `${siteUrl}/${lang === 'zh' ? '' : lang + '/'}?q={search_term_string}`
+    },
+    "query-input": "required name=search_term_string"
+  }
+}
 ---
 
 <!doctype html>
-<html lang={langConfig[lang as keyof typeof langConfig]}>
+<html lang={currentLocale}>
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
   <title>{title}</title>
   <meta name="description" content={description} />
+  <meta name="keywords" content="yihazi, tools, online toolbox, developers, json formatter, base64, utility, 效率工具, 一哈子, 开发工具, 在线工具箱, toolset, free tools" />
+  <meta name="author" content="Yihazi Team" />
+  <meta name="theme-color" content="#ffffff" />
+  <meta name="format-detection" content="telephone=no" />
   <link rel="canonical" href={canonicalUrl} />
 
-  <!-- Open Graph -->
+  <!-- Open Graph / Geo Target -->
+  <meta property="og:site_name" content="Yihazi Toolbox" />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:image" content={`${siteUrl}${ogImage}`} />
   <meta property="og:url" content={canonicalUrl} />
   <meta property="og:type" content="website" />
+  <meta property="og:locale" content={currentLocale.replace('-', '_')} />
+  {alternateLocales.map(loc => (
+    <meta property="og:locale:alternate" content={loc.replace('-', '_')} />
+  ))}
 
-  <!-- Twitter -->
+  <!-- Twitter / X -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={`${siteUrl}${ogImage}`} />
 
-  <!-- 多语言替代链接 -->
+  <!-- Apple / Mobile Optimization -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Yihazi" />
+
+  <!-- 多语言替代链接 / Hreflang Tags for Global SEO -->
   {Object.entries(langConfig).map(([l, hreflang]) => (
     <link rel="alternate" hreflang={hreflang} href={getUrlForLang(l)} />
   ))}
   <link rel="alternate" hreflang="x-default" href={getUrlForLang('zh')} />
 
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" href="/favicon.svg" />
+
+  <!-- Structured Data: WebSite Content Match -->
+  <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
+
+  <slot name="head" />
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />

@@ -2,6 +2,7 @@
 // src/layouts/ToolLayout.astro
 import BaseLayout from './BaseLayout.astro'
 import Breadcrumb from '../components/Breadcrumb.astro'
+import { getTranslation } from '../i18n'
 
 interface Props {
   title: string
@@ -21,20 +22,34 @@ const {
   category,
 } = Astro.props
 
-const breadcrumbItems = lang === 'zh'
-  ? [
-      { label: '首页', href: '/' },
-      { label: '全部工具', href: '/tools' },
-      { label: pageTitle },
-    ]
-  : [
-      { label: 'Home', href: '/en' },
-      { label: 'All Tools', href: '/en/tools' },
-      { label: pageTitle },
-    ]
+const t = getTranslation(lang)
+
+const breadcrumbItems = [
+  { label: t.site.home, href: lang === 'zh' ? '/' : `/${lang}` },
+  { label: t.site.allTools, href: lang === 'zh' ? '/tools' : `/${lang}/tools` },
+  { label: pageTitle },
+]
+
+// JSON-LD for WebApplication SEO Rich Snippet
+const toolSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": pageTitle,
+  "description": description,
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "browserRequirements": "Requires JavaScript",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
 ---
 
 <BaseLayout title={title} description={description} lang={lang}>
+  <script type="application/ld+json" set:html={JSON.stringify(toolSchema)} slot="head" />
+  
   <div class="tool-container">
     <Breadcrumb items={breadcrumbItems} />
     <h1 class="tool-title">{pageTitle}</h1>
@@ -45,8 +60,9 @@ const breadcrumbItems = lang === 'zh'
     </div>
 
     <!-- SEO 内容区 -->
-    <div class="tool-seo-section">
+    <div class="tool-seo-section mt-12 mb-8 bg-gray-50/50 rounded-2xl p-6 md:p-8 border border-gray-100 prose prose-brand max-w-none prose-headings:font-bold prose-headings:text-gray-800 prose-p:text-gray-600 prose-a:text-brand-600">
       <slot name="seo-content" />
     </div>
   </div>
 </BaseLayout>
+
