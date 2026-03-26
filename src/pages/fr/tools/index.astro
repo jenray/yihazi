@@ -1,0 +1,88 @@
+---
+// src/pages/fr/tools/index.astro
+import BaseLayout from '../../../layouts/BaseLayout.astro'
+import ToolCard from '../../../components/ToolCard.astro'
+import Breadcrumb from '../../../components/Breadcrumb.astro'
+import { getTranslation } from '../../../i18n'
+import { tools } from '../../../data/tools'
+
+const t = getTranslation('fr')
+const categories = ['developer', 'text', 'generator', 'converter', 'image', 'calculator'] as const
+
+const breadcrumbItems = [
+  { label: 'Home', href: '/fr' },
+  { label: 'All Tools' },
+]
+---
+
+<BaseLayout
+  title="All Tools - Yihazi Online Toolbox | yihazi.com"
+  description="All Yihazi tools: JSON formatter, image compressor, QR code generator, Base64 encoder, password generator, hash calculator and 20+ free online tools."
+  lang="fr"
+>
+  <div class="max-w-5xl mx-auto px-4 py-8">
+    <Breadcrumb items={breadcrumbItems} />
+    <h1 class="text-2xl font-bold mb-2">🧰 {t.site.allTools}</h1>
+    <p class="text-gray-500 mb-8">All tools run locally in your browser — your data never leaves your device.</p>
+
+    <div class="max-w-md relative mb-8">
+      <input
+        type="text"
+        id="tool-search"
+        placeholder={t.site.searchPlaceholder}
+        class="w-full px-4 py-2.5 pl-9 border border-gray-200 rounded-lg text-sm
+               focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+        autocomplete="off"
+      />
+      <svg class="absolute left-3 top-3 w-4 h-4 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+    </div>
+
+    <p id="no-results" class="hidden text-gray-400 py-4">{t.site.noResults}</p>
+
+    {categories.map((cat) => {
+      const catTools = tools.filter((tool) => tool.category === cat)
+      if (catTools.length === 0) return null
+      return (
+        <section class="mb-10" data-category={cat}>
+          <h2 class="text-base font-semibold mb-3 text-gray-700">{t.categories[cat]}</h2>
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+            {catTools.map((tool) => (
+              <ToolCard tool={tool} lang="fr" t={t} />
+            ))}
+          </div>
+        </section>
+      )
+    })}
+  </div>
+</BaseLayout>
+
+<script is:inline>
+  const searchInput = document.getElementById('tool-search')
+  const noResults = document.getElementById('no-results')
+  const categorySections = document.querySelectorAll('[data-category]')
+
+  searchInput?.addEventListener('input', (e) => {
+    const query = e.target.value.toLowerCase().trim()
+    if (!query) {
+      document.querySelectorAll('[data-tool-tags]').forEach((card) => { card.style.display = '' })
+      categorySections.forEach((s) => { s.style.display = '' })
+      noResults?.classList.add('hidden')
+      return
+    }
+    let hasResults = false
+    categorySections.forEach((section) => {
+      const sectionCards = section.querySelectorAll('[data-tool-tags]')
+      let sectionHasResults = false
+      sectionCards.forEach((card) => {
+        const tags = card.getAttribute('data-tool-tags') || ''
+        const visible = tags.toLowerCase().includes(query)
+        card.style.display = visible ? '' : 'none'
+        if (visible) { hasResults = true; sectionHasResults = true }
+      })
+      section.style.display = sectionHasResults ? '' : 'none'
+    })
+    noResults?.classList.toggle('hidden', hasResults)
+  })
+</script>
